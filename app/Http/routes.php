@@ -12,11 +12,12 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', ['tag' => '.']);
 });
 
-Route::get('order', 'OrderController@showOrder');
+Route::resource('order', 'OrderController');
 /*
+Route::get('order', 'OrderController@showOrder');
 Route::get('/order', function () {
     return view('order');
 });*/
