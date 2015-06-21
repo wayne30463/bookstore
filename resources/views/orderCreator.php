@@ -1,7 +1,11 @@
+<?php 
+namespace App\Http\Controllers;
+use URL;
+?>
 <html>
 	<body>
 		<?php include "menubar.php"; ?>
-	    <form id="order" action="/order" method="POST">
+	    <form id="order" action="<?php echo  URL::to('order');?>" method="POST">
 	    <div class="container">
     		<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 			<div class="list-group" style="margin-top: 20px auto;">
@@ -74,6 +78,9 @@
 	}
 	function storeBtn(){
 		$("#order").submit();
+	}
+	function cancelBtn(){
+		window.location = "<?php echo URL::to('order'); ?>";
 	}
 	</script>
 </html>

@@ -6,6 +6,7 @@ use DB;
 use URL;
 use App\Order;
 use App\OrderBook;
+use App\Book;
 
 
 class OrderController extends Controller {
@@ -20,7 +21,6 @@ class OrderController extends Controller {
     {
         //GET /photo
         $orders = Order::all();
-        //return view('user.profile', ['user' => User::findOrFail($id)]);
         return view("order", ['tag' => 'order', 'orders' => $orders]);
     }
     public function create()
@@ -101,8 +101,18 @@ class OrderController extends Controller {
             $order->cost = $cost;
             $order->save();
         }
-        else
+        else{
             $order->arrive = true;
+             $orderbooks = OrderBook::whereRaw("oid = ?", [$id])->get();
+             foreach ($orderbooks as $key => $value){
+                $book = new Book;
+                $book->kind = $value->kind;
+                $book->isbn = $value->isbn;
+                $book->name = $value->name;
+                $book->autor = $value->autor;
+                $book->save();
+             }
+        }
         $order->save();
         return redirect(URL::to('order'));
     }

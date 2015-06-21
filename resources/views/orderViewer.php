@@ -1,14 +1,9 @@
 <html>
 	<body>
 		<?php include "menubar.php"; ?>
-	    <form id="order" action="/order" method="POST">
+	    <form id="order" action="<?php echo URL::to('order'); ?>" method="POST">
 	    <div class="container">
-    		<input type="hidden" name="_method" value="
-	function deleteBtn(id){
-		$("input[name='_method']").val("DELETE");
-		$("#order").attr("action", "order/"+id);
-		$("#order").submit();
-	}">
+    		<input type="hidden" name="_method" value="PUT">
     		<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 			<div class="list-group" style="margin-top: 20px auto;">
 			  <a class="list-group-item"><!--active-->
@@ -76,14 +71,14 @@
 	</body>
 	<script>
 	function editBtn(){
-		window.location = '/order/<?php echo $order->id;?>/edit';
+		window.location = '<?php echo URL::to('order'); ?>/<?php echo $order->id;?>/edit';
 	}
 	function cancelBtn(){
-		window.location = '/order';
+		window.location = '<?php echo URL::to('order'); ?>';
 	}
 	function arriveBtn(id){
 		$("input[name='_method']").val("PUT");
-		$("#order").attr("action", "/order/"+id);
+		$("#order").attr("action", "<?php echo URL::to('order'); ?>/"+id);
 		$("#order").submit();
 	}
 	</script>

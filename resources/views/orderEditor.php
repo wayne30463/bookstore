@@ -1,7 +1,7 @@
 <html>
 	<body>
 		<?php include "menubar.php"; ?>
-	    <form id="order" action="/order" method="POST">
+	    <form id="order" action="<?php echo URL::to('order'); ?>" method="POST">
 	    <div class="container">
     		<input type="hidden" name="_method" value="PATCH">
     		<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
@@ -45,6 +45,13 @@
 							$among = $value->among;
 	        				include("orderCreator.BookItem.php"); 
   						}
+							$kind = 0;
+							$isbn = "";
+							$name = "";
+							$autor = "";
+							$price = 0;
+							$among = 0;
+	        				include("orderCreator.BookItem.php"); 
 	        		?>
 	        		</tbody>
 				</table>
@@ -78,8 +85,11 @@
 	}
 	function storeBtn(id){
 		$("input[name='_method']").val("PATCH");
-		$("#order").attr("action", "/order/"+id);
+		$("#order").attr("action", "<?php echo URL::to('order'); ?>/"+id);
 		$("#order").submit();
+	}
+	function cancelBtn(){
+		window.location = '<?php echo URL::to('order'); ?>';
 	}
 	</script>
 </html>
