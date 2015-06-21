@@ -1,7 +1,12 @@
-<?php namespace App\Http\Controllers;
-
+<?php 
+namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use DB;
+use URL;
+use App\Order;
+use App\OrderBook;
+
 
 class OrderController extends Controller {
 
@@ -14,8 +19,9 @@ class OrderController extends Controller {
     public function index()
     {
         //GET /photo
+        $orders = Order::all();
         //return view('user.profile', ['user' => User::findOrFail($id)]);
-        return view("order", ['tag' => 'order']);
+        return view("order", ['tag' => 'order', 'orders' => $orders]);
     }
     public function create()
     {
@@ -26,26 +32,89 @@ class OrderController extends Controller {
     public function store(Request $request)
     {
         //POST /photo
-        return "store".$request->input('name');
+        $order = new Order;
+        $order_last = Order::orderBy('id','desc')->first();
+        if($order_last == NULL)
+            $order->id = 0;
+        else
+            $order->id = $order_last->id + 1;
+        $order->date = $request->input('date');
+        $order->publish = $request->input('publish');
+        for ($i=0,$books=0,$cost=0; $i < count($request->input('kind')); $i++){ 
+            if($request->input('among')[$i] > 0){
+                $orderebook = new OrderBook;
+                $orderebook->oid = $order->id;
+                $orderebook->kind = $request->input('kind')[$i];
+                $orderebook->isbn = $request->input('isbn')[$i];
+                $orderebook->name = $request->input('name')[$i];
+                $orderebook->autor = $request->input('autor')[$i];
+                $orderebook->among = $request->input('among')[$i];
+                $orderebook->price = $request->input('price')[$i];
+                $books += $request->input('among')[$i];
+                $cost += ($orderebook->among * $orderebook->price);
+                $orderebook->save();
+            }
+        }
+        $order->books = $books;
+        $order->cost = $cost;
+        $order->save();
+        return redirect(URL::to('order'));
     }
     public function edit($id)
     {
         //GET /photo/{photo}/edit
-        return view("orderEditor", ['id' => $id, 'tag' => 'order']);
+        $order = Order::whereRaw("id = ?", [$id])->first();
+        $orderbooks = OrderBook::whereRaw("oid = ?", [$id])->get();
+        return view("orderEditor", ['tag' => 'order', 'order' => $order, 'orderbooks' => $orderbooks]);
     }
-    public function update($id)
+    public function show($id)
+    {
+        //GET /photo/{photo}
+        $order = Order::whereRaw("id = ?", [$id])->first();
+        $orderbooks = OrderBook::whereRaw("oid = ?", [$id])->get();
+        return view("orderViewer", ['tag' => 'order', 'order' => $order, 'orderbooks' => $orderbooks]);
+    }
+    public function update(Request $request,$id)
     {
         //PUT/PATCH /photo/{photo}
-        //do update($id)
-        //return redirect('order', ['tag' => 'order']);
-        return "order_update".$id;
+        $order = Order::whereRaw("id = ?", [$id])->first();
+        if($request->input('_method') == "PATCH"){
+            OrderBook::whereRaw("oid = ?", [$id])->delete();
+            $order->date = $request->input('date');
+            $order->publish = $request->input('publish');
+            for ($i=0,$books=0,$cost=0; $i < count($request->input('kind')); $i++){ 
+                if($request->input('among')[$i] > 0){
+                    $orderebook = new OrderBook;
+                    $orderebook->oid = $order->id;
+                    $orderebook->kind = $request->input('kind')[$i];
+                    $orderebook->isbn = $request->input('isbn')[$i];
+                    $orderebook->name = $request->input('name')[$i];
+                    $orderebook->autor = $request->input('autor')[$i];
+                    $orderebook->among = $request->input('among')[$i];
+                    $orderebook->price = $request->input('price')[$i];
+                    $books += $request->input('among')[$i];
+                    $cost += ($orderebook->among * $orderebook->price);
+                    $orderebook->save();
+                }
+            }
+            $order->books = $books;
+            $order->cost = $cost;
+            $order->save();
+        }
+        else
+            $order->arrive = true;
+        $order->save();
+        return redirect(URL::to('order'));
     }
     public function destroy($id)
     {
         //DELETE /photo/{photo}
         //do delete($id)
         //return redirect('order', ['tag' => 'order']);
-        return "order_destroy".$id;
+        Order::whereRaw("id = ?", [$id])->delete();
+        OrderBook::whereRaw("oid = ?", [$id])->delete();
+        $orders = Order::all();
+        return redirect(URL::to('order'));
     }
 
 }

@@ -1,9 +1,8 @@
 <html>
 	<body>
 		<?php include "menubar.php"; ?>
-	    <form id="order" action="./order" method="POST">
+	    <form id="order" action="/order" method="POST">
 	    <div class="container">
-    		<input type="hidden" name="_method" value="PUT">
     		<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 			<div class="list-group" style="margin-top: 20px auto;">
 			  <a class="list-group-item"><!--active-->
@@ -35,16 +34,6 @@
   					</thead>
   					<tbody>
   					<?php 
-				        for ($i=0; $i < 1; $i++) { 
-				        	# code...
-							$kind = $i%2 + 1;
-							$isbn = "11111111";
-							$name = "哈利波特";
-							$autor = "JK啥";
-							$price = 50;
-							$among = 5;
-	        				include("orderCreator.BookItem.php"); 
-				        }
 							$kind = 0;
 							$isbn = "";
 							$name = "";
@@ -61,7 +50,7 @@
 				    	<div style="position: absolute;right: 5px;top: 5px">
 							<button type="button" class="btn btn-success" onclick="addBookBtn()">加入新書</button>
 							<button type="button" class="btn btn-danger" onclick="delBookBtn()">刪除勾選</button>
-							<button type="button" class="btn btn-info" onclick="saveBtn()">儲存</button>
+							<button type="button" class="btn btn-info" onclick="storeBtn()">儲存</button>
 							<button type="button" class="btn btn-warning" onclick="cancelBtn()">取消</button>
 				    	</div>
 				    </h4>
@@ -82,6 +71,9 @@
 	}
 	function addBookBtn(id){
 		$("tbody").append(temp_row.clone());
+	}
+	function storeBtn(){
+		$("#order").submit();
 	}
 	</script>
 </html>

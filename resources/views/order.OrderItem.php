@@ -3,8 +3,13 @@
 		<h4 class="list-group-item-heading" style="font-size:20px">
 			<label style="align:left;">訂單編號:<?php echo $no; ?></label>
 			<div style="position: absolute;right: 5px;top: 5px;">
-		    	<button type="button" class="btn btn-success" onclick="viewBtn(<?php echo $no; ?>)">檢視</button>
-		    	<button type="button" class="btn btn-danger" onclick="deleteBtn(<?php echo $no; ?>)">刪除</button>
+		    	<button type="button" class="btn btn-default" onclick="viewBtn(<?php echo $no; ?>)">檢視</button>
+		    	<?php
+		    		if(!$arrive)
+		    			echo "<button type='button' class='btn btn-danger' onclick='deleteBtn(".$no.")'>刪除</button>";
+					else
+						echo "<button type='button' class='btn btn-success'>已入庫</button>";
+				?>
 			</div>
 		</h4>
 		<div style="cursor:pointer;">

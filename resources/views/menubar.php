@@ -10,7 +10,7 @@
 			<ul class="nav navbar-nav">
 				<?php
 				if(!isset($tag))
-					$group = "";
+					$tag = "";
 				$links = array( 
 								"首頁" => ".", 
 								"訂書" => "order", 
