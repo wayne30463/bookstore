@@ -1,3 +1,7 @@
+<?php 
+namespace App\Http\Controllers;
+use URL;
+?>
 <html>
  	<meta charset="UTF-8" />
 	<script type="text/javascript" src="<?php echo asset('js/jquery.min.js'); ?>"></script>
@@ -18,7 +22,7 @@
 								"賣書" => "3"
 							); 
 				foreach ($links as $title => $link){
-					echo "<li ".(($tag==$link)?"class='active'":"")."><a href=/".$link.">".$title."</a></li>";
+					echo "<li ".(($tag==$link)?"class='active'":"")."><a href=".URL::to($link).">".$title."</a></li>";
 				}
 			  	?>
 			</ul>

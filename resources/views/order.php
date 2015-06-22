@@ -33,17 +33,17 @@
 	<script>
 	function deleteBtn(id){
 		$("input[name='_method']").val("DELETE");
-		$("#order").attr("action", "/order/"+id);
+		$("#order").attr("action", "<?php echo URL::to('order'); ?>/"+id);
 		$("#order").submit();
 	}
 	function viewBtn(id){
 		$("input[name='_method']").val("GET");
-		$("#order").attr("action", "/order/"+id);
+		$("#order").attr("action", "<?php echo URL::to('order'); ?>/"+id);
 		$("#order").submit();
 		//window.location = '/order/' + id + '/edit';
 	}
 	function createBtn(id){
-		window.location = '/order/create';
+		window.location = '<?php echo URL::to('order'); ?>/create';
 	}
 	</script>
 </html>
