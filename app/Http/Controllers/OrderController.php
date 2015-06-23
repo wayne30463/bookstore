@@ -83,7 +83,7 @@ class OrderController extends Controller {
             $order->date = $request->input('date');
             $order->publish = $request->input('publish');
             for ($i=0,$books=0,$cost=0; $i < count($request->input('kind')); $i++){ 
-                if($request->input('among')[$i] > 0){
+                if($request->input('among')[$i] > 0 && $request->input('isbn')[$i] != ""){
                     $orderebook = new OrderBook;
                     $orderebook->oid = $order->id;
                     $orderebook->kind = $request->input('kind')[$i];
@@ -105,12 +105,15 @@ class OrderController extends Controller {
             $order->arrive = true;
              $orderbooks = OrderBook::whereRaw("oid = ?", [$id])->get();
              foreach ($orderbooks as $key => $value){
-                $book = new Book;
-                $book->kind = $value->kind;
-                $book->isbn = $value->isbn;
-                $book->name = $value->name;
-                $book->autor = $value->autor;
-                $book->save();
+                for ($i=0;$i<$value->among;$i++){
+                    $book = new Book;
+                    $book->kind = $value->kind;
+                    $book->isbn = $value->isbn;
+                    $book->name = $value->name;
+                    $book->autor = $value->autor;
+                    $book->price = $value->price;
+                    $book->save();
+                }
              }
         }
         $order->save();

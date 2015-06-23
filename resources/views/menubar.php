@@ -18,7 +18,8 @@ use URL;
 				$links = array( 
 								"首頁" => ".", 
 								"訂書" => "order", 
-								"租書" => "rent", 
+								"書庫" => "book", 
+								"顧客" => "customer", 
 								"賣書" => "3"
 							); 
 				foreach ($links as $title => $link){

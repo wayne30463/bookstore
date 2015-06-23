@@ -22,7 +22,8 @@ Route::get('/order', function () {
     return view('order');
 });*/
 
-Route::get('rent', 'RentController@showRent');
+Route::resource('rent', 'RentController');
+Route::resource('book', 'BookController');
 
 Route::get('/3', function () {
     return view('3');
